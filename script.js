@@ -501,7 +501,7 @@ function updateMonthlyView() {
     const dateInput = document.getElementById('date');
     const [year, month] = selectedMonth.split('-');
     dateInput.min = `${selectedMonth}-01`;
-    dateInput.max = new Date(year, month, 0).toISOString().split('T')[0];
+    dateInput.max = new Date(year, month, 0).toISOString().split('T')[1];
 
     updateReceivedMoneyHistory();
 }
@@ -816,46 +816,4 @@ document.querySelectorAll('.lang-btn').forEach(button => {
             button.style.transform = 'scale(1)';
         }, 150);
     });
-});
-
-
-function initializeDates() {
-    const today = new Date();
-    const monthYear = document.getElementById('monthYear');
-    const receivedDate = document.getElementById('receivedDate');
-    const expenseDate = document.getElementById('date');
-    
-    // Get selected month boundaries
-    const selectedMonth = monthYear.value ? new Date(monthYear.value) : new Date();
-    const firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), );
-    const lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + , 0);
-    
-    // Format dates as YYYY-MM-DD
-    const firstDayString = firstDay.toISOString().split('T')[0];
-    const lastDayString = lastDay.toISOString().split('T')[0];
-    const todayString = today.toISOString().split('T')[0];
-    
-    // Set constraints for both date inputs
-    [receivedDate, expenseDate].forEach(input => {
-        input.min = firstDayString;
-        input.max = lastDayString;
-        
-        // Reset to first day if current value is outside month range
-        const currentDate = new Date(input.value);
-        if (currentDate < firstDay || currentDate > lastDay) {
-            input.value = today >= firstDay && today <= lastDay ? todayString : firstDayString;
-        }
-    });
-}
-
-// Remove duplicate month change listener and update remaining one
-document.getElementById('monthYear').addEventListener('change', function() {
-    initializeDates();
-    updateMonthlyView();
-});
-
-// Update month change listener
-document.getElementById('monthYear').addEventListener('change', function() {
-    initializeDates();
-    updateMonthlyView();
 });
